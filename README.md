@@ -25,5 +25,22 @@ to the require section of your `composer.json` file.
 Usage
 -----
 
-Once the extension is installed, simply use it in your code by  :
+Once the extension is installed, simply use it in your code by configuring your console application:
 
+```php
+return [
+    ...
+    'controllerMap' => [
+        ...
+        'migrate' => [
+            'class' => 'flexibuild\migrate\controllers\MigrateController',
+        ],
+    ],
+    ...
+];
+```
+
+If you do not want to use migrate command from this extension
+you may be want simply to extend you migration class from one of:
+- `flexibuild\migrate\db\Migration`
+- `flexibuild\migrate\db\CreateTableMigration`
