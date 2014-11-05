@@ -1,0 +1,21 @@
+{
+    "name": "flexibuild/migrate",
+    "description": "Helpful tools for yii2 migrations",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","migrate","migration"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "SeynovAM",
+            "email": "sejnovalexey@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "flexibuild\\migrate\\": ""
+        }
+    }
+}
