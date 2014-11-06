@@ -203,17 +203,18 @@ abstract class CreateTableMigration extends Migration
     public function up()
     {
         $this->validateTableConfig();
+        $tableName = $this->autoWrappedTableName($this->tableName());
 
-        $this->createTable($this->tableName(), $this->tableColumns());
+        $this->createTable($tableName, $this->tableColumns());
 
         foreach ($this->tableIndexes() as $indexFields => $unique) {
-            $this->createIndexAutoNamed($this->tableName(), $indexFields, $unique);
+            $this->createIndexAutoNamed($tableName, $indexFields, $unique);
         }
 
         $generatedColumns = [];
         foreach ($this->tableForeignKeys() as $key => $fk) {
             $columns = $fk[self::CFG_COLUMNS];
-            $refTable = $this->wrapTableName($fk[self::CFG_REF_TABLE]);
+            $refTable = $this->autoWrappedTableName($fk[self::CFG_REF_TABLE]);
             $refColumns = $fk[self::CFG_REF_COLUMNS];
             $onDelete = array_key_exists(self::CFG_ON_DELETE, $fk) ? $fk[self::CFG_ON_DELETE] : static::FK_RESTRICT;
             $onUpdate = array_key_exists(self::CFG_ON_UPDATE, $fk) ? $fk[self::CFG_ON_UPDATE] : static::FK_RESTRICT;
@@ -223,39 +224,40 @@ abstract class CreateTableMigration extends Migration
                 $indexName = $key;
                 $fkName = $key;
             } else {
-                $indexName = $this->generateIndexName($this->tableName(), $columns, static::PREFIX_FOREIGN_KEY_INDEX);
-                $fkName = $this->generateForeignKeyName($this->tableName(), $columns, $refTable, $refColumns);
+                $indexName = $this->generateIndexName($tableName, $columns, static::PREFIX_FOREIGN_KEY_INDEX);
+                $fkName = $this->generateForeignKeyName($tableName, $columns, $refTable, $refColumns);
             }
 
             if ($this->createIndexesBeforeAddingFK) {
                 $implodedColumns = $this->implodeColumns($columns);
                 if (!isset($generatedColumns[$implodedColumns])) {
-                    $this->createIndex($indexName, $this->tableName(), $columns, $unique);
+                    $this->createIndex($indexName, $tableName, $columns, $unique);
                     $generatedColumns[$implodedColumns] = true;
                 }
             }
-            $this->addForeignKey($fkName, $this->tableName(), $columns, $refTable, $refColumns, $onDelete, $onUpdate);
+            $this->addForeignKey($fkName, $tableName, $columns, $refTable, $refColumns, $onDelete, $onUpdate);
         }
     }
 
     public function down()
     {
         $this->validateTableConfig();
+        $tableName = $this->autoWrappedTableName($this->tableName());
 
         foreach ($this->tableForeignKeys() as $key => $fk) {
             $columns = $fk[self::CFG_COLUMNS];
-            $refTable = $this->wrapTableName($fk[self::CFG_REF_TABLE]);
+            $refTable = $this->autoWrappedTableName($fk[self::CFG_REF_TABLE]);
             $refColumns = $fk[self::CFG_REF_COLUMNS];
 
             if (is_string($key)) {
                 $fkName = $key;
             } else {
-                $fkName = $this->generateForeignKeyName($this->tableName(), $columns, $refTable, $refColumns);
+                $fkName = $this->generateForeignKeyName($tableName, $columns, $refTable, $refColumns);
             }
 
-            $this->dropForeignKey($fkName, $this->tableName());
+            $this->dropForeignKey($fkName, $tableName);
         }
 
-        $this->dropTable($this->tableName());
+        $this->dropTable($tableName);
     }
 }

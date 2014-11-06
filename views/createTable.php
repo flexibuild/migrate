@@ -14,7 +14,7 @@ echo "<?php\n";
 
 use yii\db\Schema;
 
-use console\base\db\CreateTableMigration;
+use flexibuild\migrate\db\CreateTableMigration;
 
 class <?= $className ?> extends CreateTableMigration
 {

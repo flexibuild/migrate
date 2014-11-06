@@ -10,7 +10,7 @@ echo "<?php\n";
 
 use yii\db\Schema;
 
-use console\base\db\Migration;
+use flexibuild\migrate\db\Migration;
 
 class <?= $className ?> extends Migration
 {

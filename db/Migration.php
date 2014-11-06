@@ -88,14 +88,14 @@ class Migration extends BaseMigration
     }
 
     /**
-     * It method sees `$autoWrapTableNames` param.
+     * It method sees `$autoWrapTableNames` param. If it is true than table name will be wrapped.
      * @see self::$autoWrapTableNames
      * @see wrapTableName()
      * 
      * @param string $tableName input table name.
      * @return string wrapped table name.
      */
-    private function _wrappedTableName($tableName)
+    protected function autoWrappedTableName($tableName)
     {
         if ($this->autoWrapTableNames) {
             return $this->wrapTableName($tableName);
@@ -147,7 +147,7 @@ class Migration extends BaseMigration
      */
     public function insert($table, $columns)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::insert($table, $columns);
     }
 
@@ -157,7 +157,7 @@ class Migration extends BaseMigration
      */
     public function batchInsert($table, $columns, $rows)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::batchInsert($table, $columns, $rows);
     }
 
@@ -167,7 +167,7 @@ class Migration extends BaseMigration
      */
     public function update($table, $columns, $condition = '', $params = [])
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::update($table, $columns, $condition, $params);
     }
 
@@ -177,7 +177,7 @@ class Migration extends BaseMigration
      */
     public function delete($table, $condition = '', $params = [])
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::delete($table, $condition, $params);
     }
 
@@ -195,7 +195,7 @@ class Migration extends BaseMigration
             $collate = $charset . '_unicode_ci';
             $options = "CHARACTER SET $charset COLLATE $collate ENGINE=InnoDB";
         }
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::createTable($table, $columns, $options);
     }
 
@@ -205,8 +205,8 @@ class Migration extends BaseMigration
      */
     public function renameTable($table, $newName)
     {
-        $table = $this->_wrappedTableName($table);
-        $newName = $this->_wrappedTableName($newName);
+        $table = $this->autoWrappedTableName($table);
+        $newName = $this->autoWrappedTableName($newName);
         return parent::renameTable($table, $newName);
     }
 
@@ -216,7 +216,7 @@ class Migration extends BaseMigration
      */
     public function dropTable($table)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::dropTable($table);
     }
 
@@ -226,7 +226,7 @@ class Migration extends BaseMigration
      */
     public function truncateTable($table)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::truncateTable($table);
     }
 
@@ -236,7 +236,7 @@ class Migration extends BaseMigration
      */
     public function addColumn($table, $column, $type)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::addColumn($table, $column, $type);
     }
 
@@ -246,7 +246,7 @@ class Migration extends BaseMigration
      */
     public function dropColumn($table, $column)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::dropColumn($table, $column);
     }
 
@@ -256,7 +256,7 @@ class Migration extends BaseMigration
      */
     public function renameColumn($table, $name, $newName)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::renameColumn($table, $name, $newName);
     }
 
@@ -266,7 +266,7 @@ class Migration extends BaseMigration
      */
     public function alterColumn($table, $column, $type)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::alterColumn($type, $column, $type);
     }
 
@@ -276,7 +276,7 @@ class Migration extends BaseMigration
      */
     public function addPrimaryKey($name, $table, $columns)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::addPrimaryKey($name, $table, $columns);
     }
 
@@ -286,7 +286,7 @@ class Migration extends BaseMigration
      */
     public function dropPrimaryKey($name, $table)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::dropForeignKey($name, $table);
     }
 
@@ -296,8 +296,8 @@ class Migration extends BaseMigration
      */
     public function addForeignKey($name, $table, $columns, $refTable, $refColumns, $delete = null, $update = null)
     {
-        $table = $this->_wrappedTableName($table);
-        $refTable = $this->_wrappedTableName($refTable);
+        $table = $this->autoWrappedTableName($table);
+        $refTable = $this->autoWrappedTableName($refTable);
         return parent::addForeignKey($name, $table, $columns, $refTable, $refColumns, $delete, $update);
     }
 
@@ -307,7 +307,7 @@ class Migration extends BaseMigration
      */
     public function dropForeignKey($name, $table)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::dropForeignKey($name, $table);
     }
 
@@ -317,7 +317,7 @@ class Migration extends BaseMigration
      */
     public function createIndex($name, $table, $columns, $unique = false)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::createIndex($name, $table, $columns, $unique);
     }
 
@@ -327,7 +327,7 @@ class Migration extends BaseMigration
      */
     public function dropIndex($name, $table)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         return parent::dropIndex($name, $table);
     }
 
@@ -402,7 +402,7 @@ class Migration extends BaseMigration
      */
     public function createIndexAutoNamed($table, $columns, $unique = false)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         $name = $this->generateIndexName($table, $columns, $unique ? static::PREFIX_UNIQUE_INDEX : static::PREFIX_INDEX);
         $this->createIndex($name, $table, $columns, $unique);
     }
@@ -418,7 +418,7 @@ class Migration extends BaseMigration
      */
     public function dropIndexAutoNamed($table, $columns, $unique = false)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         $name = $this->generateIndexName($table, $columns, $unique ? static::PREFIX_UNIQUE_INDEX : static::PREFIX_INDEX);
         $this->dropIndex($name, $table);
     }
@@ -438,8 +438,8 @@ class Migration extends BaseMigration
      */
     public function addForeignKeyAutoNamed($table, $columns, $refTable, $refColumns, $createIndex = true, $delete = self::FK_RESTRICT, $update = self::FK_RESTRICT)
     {
-        $table = $this->_wrappedTableName($table);
-        $refTable = $this->_wrappedTableName($refTable);
+        $table = $this->autoWrappedTableName($table);
+        $refTable = $this->autoWrappedTableName($refTable);
 
         if ($createIndex) {
             $name = $this->generateIndexName($table, $columns, static::PREFIX_FOREIGN_KEY_INDEX);
@@ -462,8 +462,8 @@ class Migration extends BaseMigration
      */
     public function dropForeignKeyAutoNamed($table, $columns, $refTable, $refColumns, $dropCreatedIndex = true)
     {
-        $table = $this->_wrappedTableName($table);
-        $refTable = $this->_wrappedTableName($refTable);
+        $table = $this->autoWrappedTableName($table);
+        $refTable = $this->autoWrappedTableName($refTable);
 
         $name = $this->generateForeignKeyName($table, $columns, $refTable, $refColumns);
         $this->dropForeignKey($name, $table);
@@ -484,7 +484,7 @@ class Migration extends BaseMigration
      */
     public function addPrimaryKeyAutoNamed($table, $columns)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         $name = $this->generateIndexName($table, $columns, static::PREFIX_PRIMARY_KEY);
         $this->addPrimaryKey($name, $table, $columns);
     }
@@ -498,7 +498,7 @@ class Migration extends BaseMigration
      */
     public function dropPrimaryKeyAutoNamed($table, $columns)
     {
-        $table = $this->_wrappedTableName($table);
+        $table = $this->autoWrappedTableName($table);
         $name = $this->generateIndexName($table, $columns, static::PREFIX_PRIMARY_KEY);
         $this->dropPrimaryKey($name, $table);
     }
