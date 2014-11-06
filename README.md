@@ -5,11 +5,11 @@ Helpful tools for yii2 migrations.
 
 With this extenension you can:
 
-- forget about wrapping table names like `{{%table_name}}`, extension will do it automatically.
-- create indexes and foreign keys without inventing them names.
-- create table without passing character set and collate. The extension will do it by default.
-- a simple table creation with exntending from `flexibuild\migrate\db\CreateTableMigration`.
-- and other small features.
+ * forget about wrapping table names like `{{%table_name}}`, extension will do it automatically.
+ * create indexes and foreign keys without inventing them names.
+ * create table without passing character set and collate. The extension will do it by default for MySQL databases.
+ * simply create migrations that create tables with exntending from `flexibuild\migrate\db\CreateTableMigration`.
+ * and other small features.
 
 Installation
 ------------
@@ -51,5 +51,5 @@ return [
 
 If you do not want to use migrate command from this extension
 you may be want simply to extend you migration class from one of:
-- `flexibuild\migrate\db\Migration`
-- `flexibuild\migrate\db\CreateTableMigration`
+ * `flexibuild\migrate\db\Migration`
+ * `flexibuild\migrate\db\CreateTableMigration`
