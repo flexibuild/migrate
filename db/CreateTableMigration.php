@@ -239,6 +239,9 @@ abstract class CreateTableMigration extends Migration
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function down()
     {
         $this->validateTableConfig();
