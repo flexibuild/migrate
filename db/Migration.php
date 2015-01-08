@@ -50,6 +50,7 @@ class Migration extends BaseMigration
     const DEFAULT_0 = ' DEFAULT 0';
     const DEFAULT_1 = ' DEFAULT 1';
     const DEFAULT_ = ' DEFAULT ';
+    const DEFAULT_EMPTY_STRING = ' DEFAULT ""';
 
     /**
      * Const that used in `truncateLongName()` for truncating long names.
