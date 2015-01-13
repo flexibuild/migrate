@@ -33,10 +33,10 @@ class <?= $className ?> extends CreateTableMigration
     {
         return [
             'id' => Schema::TYPE_PK,
-            '<?= $tableName ?>_name' => Schema::TYPE_STRING.self::NOT_NULL,
+            '<?= $tableName ?>_name' => Schema::TYPE_STRING . self::NOT_NULL,
 
-            'created_at' => Schema::TYPE_INTEGER.self::NOT_NULL,
-            'updated_at' => Schema::TYPE_INTEGER.self::NOT_NULL,
+            'created_at' => Schema::TYPE_INTEGER . self::NOT_NULL,
+            'updated_at' => Schema::TYPE_INTEGER . self::NOT_NULL,
         ];
     }
 
