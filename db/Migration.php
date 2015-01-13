@@ -3,7 +3,6 @@
 namespace flexibuild\migrate\db;
 
 use yii\base\InvalidParamException;
-use yii\db\Migration as BaseMigration;
 
 /**
  * Base application migration class with some helpful features for writing yii2 migrations.
@@ -29,7 +28,7 @@ use yii\db\Migration as BaseMigration;
  * 
  * @author SeynovAM <sejnovalexey@gmail.com>
  */
-class Migration extends BaseMigration
+class Migration extends \yii\db\Migration
 {
     /**
      * Constants for using in column types.

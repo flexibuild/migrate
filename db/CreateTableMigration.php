@@ -198,10 +198,32 @@ abstract class CreateTableMigration extends Migration
     }
 
     /**
+     * Method will be called before the migration 'up' logic.
+     * @return boolean return a false value to indicate the migration fails
+     * and should be stopped. All other return values mean the migration will be continued.
+     */
+    protected function beforeUp()
+    {
+    }
+
+    /**
+     * Method will be called after the migration 'up' logic.
+     * @return boolean return a false value to indicate the migration fails
+     * and should not proceed further. All other return values mean the migration succeeds.
+     */
+    protected function afterUp()
+    {
+    }
+
+    /**
      * @inheritdoc
      */
     public function up()
     {
+        if ($this->beforeUp() === false) {
+            return false;
+        }
+
         $this->validateTableConfig();
         $tableName = $this->autoWrappedTableName($this->tableName());
 
@@ -237,6 +259,26 @@ abstract class CreateTableMigration extends Migration
             }
             $this->addForeignKey($fkName, $tableName, $columns, $refTable, $refColumns, $onDelete, $onUpdate);
         }
+
+        return $this->afterUp();
+    }
+
+    /**
+     * Method will be called before the migration 'down' logic.
+     * @return boolean return a false value to indicate the migration fails
+     * and should be stopped. All other return values mean the migration will be continued.
+     */
+    protected function beforeDown()
+    {
+    }
+
+    /**
+     * Method will be called after the migration 'down' logic.
+     * @return boolean return a false value to indicate the migration fails
+     * and should not proceed further. All other return values mean the migration succeeds.
+     */
+    protected function afterDown()
+    {
     }
 
     /**
@@ -244,6 +286,10 @@ abstract class CreateTableMigration extends Migration
      */
     public function down()
     {
+        if ($this->beforeDown() === false) {
+            return false;
+        }
+
         $this->validateTableConfig();
         $tableName = $this->autoWrappedTableName($this->tableName());
 
@@ -262,5 +308,7 @@ abstract class CreateTableMigration extends Migration
         }
 
         $this->dropTable($tableName);
+
+        return $this->afterDown();
     }
 }
