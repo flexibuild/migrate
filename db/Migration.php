@@ -107,7 +107,8 @@ class Migration extends \yii\db\Migration
      * Generates SQL type string for ENUM columns. You may be will want to use it
      * when you will create table with `createTable()` method.
      * @param array $values all possible ENUM values.
-     * @param string|null $default default column value. NULL by default.
+     * @param string|null|boolean $default default column value. NULL by default.
+     * False meaning the column will have not default value.
      * @param boolean $notNull whether it column can be null or not.
      * @return string generated SQL string.
      * @throws InvalidParamException
@@ -118,24 +119,24 @@ class Migration extends \yii\db\Migration
             if ($notNull) {
                 throw new InvalidParamException('Cannot create not null property with default null value.');
             }
-        } else {
+        } elseif ($default !== false) {
             if (!in_array($default, $values, true)) {
                 throw new InvalidParamException("Default value '$default' was not found in values list.");
             }
         }
 
         $db = $this->db;
-        $result = 'ENUM('.implode(', ', array_map(function ($value) use ($db) {
+        $result = 'ENUM(' . implode(', ', array_map(function ($value) use ($db) {
             return $db->getSchema()->quoteValue($value);
-        }, $values)).')';
+        }, $values)) . ')';
 
         if ($notNull) {
             $result .= self::NOT_NULL;
         }
         if ($default === null) {
             $result .= self::DEFAULT_NULL;
-        } else {
-            $result .= self::DEFAULT_.$db->getSchema()->quoteValue($default);
+        } elseif ($default !== false) {
+            $result .= self::DEFAULT_ . $db->getSchema()->quoteValue($default);
         }
 
         return $result;
