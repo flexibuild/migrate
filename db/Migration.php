@@ -268,7 +268,7 @@ class Migration extends \yii\db\Migration
     public function alterColumn($table, $column, $type)
     {
         $table = $this->autoWrappedTableName($table);
-        return parent::alterColumn($type, $column, $type);
+        return parent::alterColumn($table, $column, $type);
     }
 
     /**
