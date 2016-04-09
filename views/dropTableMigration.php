@@ -4,26 +4,39 @@
  * The following variables are available in this view:
  */
 /* @var $className string the new migration class name */
+/* @var $table string the name table */
+/* @var $fields array the fields */
 
-if (preg_match('/_create_table_(.*)$/', $className, $matches)) {
-    $tableName = $matches[1];
-}
 
 echo "<?php\n";
 ?>
-
-use yii\db\Schema;
 
 use flexibuild\migrate\db\CreateTableMigration;
 
 class <?= $className ?> extends CreateTableMigration
 {
     /**
+     * Inverted logic - calling down method, that means dropping table.
+     */
+    public function up()
+    {
+        return parent::down();
+    }
+
+    /**
+     * Inverted logic - calling up method, that means creating table.
+     */
+    public function down()
+    {
+        return parent::up();
+    }
+
+    /**
      * @inheritdoc
      */
     protected function tableName()
     {
-        return '<?= $tableName ?>';
+        return '<?= $table ?>';
     }
 
     /**
@@ -32,11 +45,12 @@ class <?= $className ?> extends CreateTableMigration
     protected function tableColumns()
     {
         return [
-            'id' => Schema::TYPE_PK,
-            '<?= $tableName ?>_name' => Schema::TYPE_STRING . self::NOT_NULL,
+<?php foreach ($fields as $field): ?>
+            '<?= $field['property'] ?>' => $this-><?= $field['decorators'] . ",\n"?>
+<?php endforeach; ?>
 
-            'created_at' => Schema::TYPE_INTEGER . self::NOT_NULL,
-            'updated_at' => Schema::TYPE_INTEGER . self::NOT_NULL,
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull(),
         ];
     }
 
@@ -66,11 +80,11 @@ class <?= $className ?> extends CreateTableMigration
     {
         return [
             /*
-            '<?= $tableName ?>_name' => true, // unique
+            '<?= $table ?>_name' => true, // unique
             'created_at' => false, // non-unique
 
             implode(', ', [
-                '<?= $tableName ?>_name',
+                '<?= $table ?>_name',
                 'created_at',
             ]) => true, // multiple columns, unique
             */
