@@ -333,6 +333,50 @@ class Migration extends \yii\db\Migration
     }
 
     /**
+     * @inheritdoc
+     * Note: table will be auto pefixied if [[$autoWrapTableNames]] is true.
+     * @since 0.3.0
+     */
+    public function addCommentOnColumn($table, $column, $comment)
+    {
+        $table = $this->autoWrappedTableName($table);
+        return parent::addCommentOnColumn($table, $column, $comment);
+    }
+
+    /**
+     * @inheritdoc
+     * Note: table will be auto pefixied if [[$autoWrapTableNames]] is true.
+     * @since 0.3.0
+     */
+    public function addCommentOnTable($table, $comment)
+    {
+        $table = $this->autoWrappedTableName($table);
+        return parent::addCommentOnTable($table, $comment);
+    }
+
+    /**
+     * @inheritdoc
+     * Note: table will be auto pefixied if [[$autoWrapTableNames]] is true.
+     * @since 0.3.0
+     */
+    public function dropCommentFromColumn($table, $column)
+    {
+        $table = $this->autoWrappedTableName($table);
+        return parent::dropCommentFromColumn($table, $column);
+    }
+
+    /**
+     * @inheritdoc
+     * Note: table will be auto pefixied if [[$autoWrapTableNames]] is true.
+     * @since 0.3.0
+     */
+    public function dropCommentFromTable($table)
+    {
+        $table = $this->autoWrappedTableName($table);
+        return parent::dropCommentFromTable($table);
+    }
+
+    /**
      * Implodes columns with `__` separator. It will removes all special chars
      * like '{', '}', '[', ']' and others.
      * @param string|array $columns the columns to be processed
