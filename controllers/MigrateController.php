@@ -108,10 +108,7 @@ class MigrateController extends \yii\console\controllers\MigrateController
     public function actionCreateToAddColumn($tableName, $columnName)
     {
         $name = "add_{$columnName}_column_to_{$tableName}_table";
-        $this->fields[] = [
-            'property' => $columnName,
-            'decorators' => 'string()->defaultValue(null)',
-        ];
+        $this->fields[] = "$columnName:string";
         return $this->actionCreate($name);
     }
 
@@ -135,10 +132,7 @@ class MigrateController extends \yii\console\controllers\MigrateController
     public function actionCreateToDropColumn($tableName, $columnName)
     {
         $name = "drop_{$columnName}_column_from_{$tableName}_table";
-        $this->fields[] = [
-            'property' => $columnName,
-            'decorators' => 'string()->defaultValue(null)',
-        ];
+        $this->fields[] = "$columnName:string";
         return $this->actionCreate($name);
     }
 }
