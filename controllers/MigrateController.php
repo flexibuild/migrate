@@ -40,7 +40,7 @@ class MigrateController extends \yii\console\controllers\MigrateController
      */
     public function actionCreateForTable($tableName)
     {
-        $name = "create_$tableName";
+        $name = "create_{$tableName}_table";
         return $this->actionCreate($name);
     }
 
@@ -61,7 +61,7 @@ class MigrateController extends \yii\console\controllers\MigrateController
      */
     public function actionCreateToDropTable($tableName)
     {
-        $name = "drop_$tableName";
+        $name = "drop_{$tableName}_table";
         return $this->actionCreate($name);
     }
 
@@ -84,7 +84,7 @@ class MigrateController extends \yii\console\controllers\MigrateController
      */
     public function actionCreateForJunctionTable($table1, $table2)
     {
-        $name = "create_junction_{$table1}_and_{$table2}";
+        $name = "create_junction_{$table1}_and_{$table2}_tables";
         return $this->actionCreate($name);
     }
 
@@ -107,7 +107,7 @@ class MigrateController extends \yii\console\controllers\MigrateController
      */
     public function actionCreateToAddColumn($tableName, $columnName)
     {
-        $name = "add_{$columnName}_to_{$tableName}";
+        $name = "add_{$columnName}_column_to_{$tableName}_table";
         $this->fields[] = [
             'property' => $columnName,
             'decorators' => 'string()->defaultValue(null)',
@@ -134,7 +134,7 @@ class MigrateController extends \yii\console\controllers\MigrateController
      */
     public function actionCreateToDropColumn($tableName, $columnName)
     {
-        $name = "drop_{$columnName}_from_{$tableName}";
+        $name = "drop_{$columnName}_column_from_{$tableName}_table";
         $this->fields[] = [
             'property' => $columnName,
             'decorators' => 'string()->defaultValue(null)',

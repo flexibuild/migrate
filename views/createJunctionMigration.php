@@ -5,8 +5,8 @@
  */
 /* @var $className string the new migration class name */
 /* @var $table string the name table */
-/* @var $field_first string the name field first */
-/* @var $field_second string the name field second */
+/* @var $fields array the fields */
+/* @var $foreignKeys array the foreign keys */
 
 echo "<?php\n";
 ?>
@@ -30,8 +30,11 @@ class <?= $className ?> extends CreateTableMigration
     {
         return [
             'id' => $this->primaryKey(),
-            '<?= $field_first ?>_id' => $this->integer()->notNull(),
-            '<?= $field_second ?>_id' => $this->integer()->notNull(),
+<?php foreach ($fields as $field): ?>
+<?php if (!empty($field['decorators'])): ?>
+            <?= "'{$field['property']}' => \$this->{$field['decorators']}" ?>->notNull(),
+<?php endif; ?>
+<?php endforeach; ?>
             'created_at' => $this->integer()->notNull(),
         ];
     }
@@ -42,22 +45,16 @@ class <?= $className ?> extends CreateTableMigration
     protected function tableForeignKeys()
     {
         return [
+<?php foreach ($foreignKeys as $column => $fkData): ?>
             [
-                self::CFG_COLUMNS => '<?= $field_first ?>_id',
-                self::CFG_REF_TABLE => '<?= $field_first ?>',
+                self::CFG_COLUMNS => '<?= $column ?>',
+                self::CFG_REF_TABLE => '<?= $fkData['relatedTable'] ?>',
                 self::CFG_REF_COLUMNS => 'id',
                 self::CFG_ON_DELETE => self::FK_CASCADE, // optional, restrict by default
                 self::CFG_ON_UPDATE => self::FK_RESTRICT, // optional, restrict by default
                 self::CFG_UNIQUE => false, // optional, false by default
             ],
-            [
-                self::CFG_COLUMNS => '<?= $field_second ?>_id',
-                self::CFG_REF_TABLE => '<?= $field_second ?>',
-                self::CFG_REF_COLUMNS => 'id',
-                self::CFG_ON_DELETE => self::FK_CASCADE, // optional, restrict by default
-                self::CFG_ON_UPDATE => self::FK_RESTRICT, // optional, restrict by default
-                self::CFG_UNIQUE => false, // optional, false by default
-            ],
+<?php endforeach; ?>
         ];
     }
 
@@ -68,17 +65,16 @@ class <?= $className ?> extends CreateTableMigration
     {
         return [
             implode(' ', [
-                '<?= $field_first ?>',
-                '<?= $field_second ?>',
+<?php foreach (array_keys($foreignKeys) as $column): ?>
+                '<?= $column ?>',
+<?php endforeach; ?>
             ]) => true, // unique
+<?php foreach (array_keys($foreignKeys) as $column): ?>
             implode(' ', [
-                '<?= $field_first ?>',
+                '<?= $column ?>',
                 'created_at',
             ]) => false, // non-unique
-            implode(' ', [
-                '<?= $field_second ?>',
-                'created_at',
-            ]) => false, // non-unique
+<?php endforeach; ?>
         ];
     }
 }
